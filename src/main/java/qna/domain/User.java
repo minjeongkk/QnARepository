@@ -2,19 +2,26 @@ package qna.domain;
 
 import qna.UnAuthorizedException;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name="user")
 public class User {
     public static final GuestUser GUEST_USER = new GuestUser();
 
+    @Id
+    @GeneratedValue
     private Long id;
+    @Column
     private String userId;
+    @Column
     private String password;
+    @Column
     private String name;
+    @Column
     private String email;
 
-    private User() {
-    }
 
     public User(String userId, String password, String name, String email) {
         this(null, userId, password, name, email);
@@ -26,6 +33,10 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public User() {
+
     }
 
     public void update(User loginUser, User target) {

@@ -18,7 +18,6 @@ class UserRepositoryTest {
     void save() {
         User expected = new User();
         User actual = userRepository.save(expected);
-        userRepository.save(new User());
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getName()).isEqualTo(expected.getName())

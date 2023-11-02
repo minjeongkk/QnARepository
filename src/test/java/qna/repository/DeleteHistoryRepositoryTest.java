@@ -32,4 +32,17 @@ public class DeleteHistoryRepositoryTest {
                 () -> assertThat(actual).isEqualTo(expected)
         );
     }
+
+    @Test
+    void checkContents() {
+        ContentType contentType = ContentType.ANSWER;
+        Long contentId = 1L;
+        Long userId = 1L;
+        LocalDateTime createDate = LocalDateTime.now();
+
+        DeleteHistory expected = new DeleteHistory(contentType, contentId, userId, createDate);
+        DeleteHistory actual = deleteHistoryRepository.save(expected);
+
+        assertThat(actual.getContentType()).isEqualTo(contentType);
+    }
 }

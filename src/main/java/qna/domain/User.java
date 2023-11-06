@@ -3,15 +3,15 @@ package qna.domain;
 import qna.UnAuthorizedException;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name="user")
 public class User {
     public static final GuestUser GUEST_USER = new GuestUser();
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String userId;
@@ -21,10 +21,20 @@ public class User {
     private String name;
     @Column
     private String email;
+    @OneToMany(mappedBy = "writer")
+    private List<Question> questionList;
+    @OneToMany(mappedBy = "writer")
+    private List<Answer> answerList;
+    @OneToMany(mappedBy = "deletedById")
+    private List<DeleteHistory> deleteHistoryList;
 
 
     public User(String userId, String password, String name, String email) {
-        this(null, userId, password, name, email);
+        this(null, userId, password, name, email, null, null, null);
+    }
+
+    public User() {
+
     }
 
     public User(Long id, String userId, String password, String name, String email) {
@@ -35,8 +45,15 @@ public class User {
         this.email = email;
     }
 
-    public User() {
-
+    public User(Long id, String userId, String password, String name, String email, List<Question> questionList, List<Answer> answerList, List<DeleteHistory> deleteHistoryList) {
+        this.id = id;
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.questionList = questionList;
+        this.answerList = answerList;
+        this.deleteHistoryList = deleteHistoryList;
     }
 
     public void update(User loginUser, User target) {
@@ -111,6 +128,30 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Question> getQuestionList() {
+        return questionList;
+    }
+
+    public void setQuestionList(List<Question> questionList) {
+        this.questionList = questionList;
+    }
+
+    public List<Answer> getAnswerList() {
+        return answerList;
+    }
+
+    public void setAnswerList(List<Answer> answerList) {
+        this.answerList = answerList;
+    }
+
+    public List<DeleteHistory> getDeleteHistoryList() {
+        return deleteHistoryList;
+    }
+
+    public void setDeleteHistoryList(List<DeleteHistory> deleteHistoryList) {
+        this.deleteHistoryList = deleteHistoryList;
     }
 
     @Override

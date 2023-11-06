@@ -13,12 +13,13 @@ public class DeleteHistory {
     private ContentType contentType;
     @Column
     private Long contentId;
-    @Column
-    private Long deletedById;
+    @JoinColumn
+    @ManyToOne
+    private User deletedById;
     @Column
     private LocalDateTime createDate = LocalDateTime.now();
 
-    public DeleteHistory(ContentType contentType, Long contentId, Long deletedById, LocalDateTime createDate) {
+    public DeleteHistory(ContentType contentType, Long contentId, User deletedById, LocalDateTime createDate) {
         this.contentType = contentType;
         this.contentId = contentId;
         this.deletedById = deletedById;
@@ -68,7 +69,7 @@ public class DeleteHistory {
         return contentId;
     }
 
-    public Long getDeletedById() {
+    public User getDeletedById() {
         return deletedById;
     }
 

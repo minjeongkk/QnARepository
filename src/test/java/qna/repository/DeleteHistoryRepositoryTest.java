@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import qna.domain.ContentType;
 import qna.domain.DeleteHistory;
 import qna.domain.DeleteHistoryRepository;
+import qna.domain.User;
 
 import java.time.LocalDateTime;
 
@@ -21,10 +22,10 @@ public class DeleteHistoryRepositoryTest {
     void save() {
         ContentType contentType = ContentType.ANSWER;
         Long contentId = 1L;
-        Long userId = 1L;
+        User user = new User();
         LocalDateTime createDate = LocalDateTime.now();
 
-        DeleteHistory expected = new DeleteHistory(contentType, contentId, userId, createDate);
+        DeleteHistory expected = new DeleteHistory(contentType, contentId, user, createDate);
         DeleteHistory actual = deleteHistoryRepository.save(expected);
 
         assertAll(
@@ -37,10 +38,10 @@ public class DeleteHistoryRepositoryTest {
     void checkContents() {
         ContentType contentType = ContentType.ANSWER;
         Long contentId = 1L;
-        Long userId = 1L;
+        User user = new User();
         LocalDateTime createDate = LocalDateTime.now();
 
-        DeleteHistory expected = new DeleteHistory(contentType, contentId, userId, createDate);
+        DeleteHistory expected = new DeleteHistory(contentType, contentId, user, createDate);
         DeleteHistory actual = deleteHistoryRepository.save(expected);
 
         assertThat(actual.getContentType()).isEqualTo(contentType);

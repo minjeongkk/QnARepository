@@ -21,7 +21,7 @@ public class AnswerRepositoryTest {
         Answer actual = answerRepository.save(expected);
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getWriterId()).isEqualTo(expected.getWriterId())
+                () -> assertThat(actual.getWriter()).isEqualTo(expected.getWriter())
         );
     }
 
@@ -31,6 +31,6 @@ public class AnswerRepositoryTest {
         userRepository.save(user);
         Question question = new Question("hello", "hi");
         Answer expected = new Answer(user,question, "good");
-        assertThat(expected.getWriterId()).isEqualTo(user.getId());
+        assertThat(expected.getWriter()).isEqualTo(user);
     }
 }

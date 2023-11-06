@@ -24,7 +24,7 @@ public class QuestionRepositoryTest {
         Question actual = questionRepository.save(expected);
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getWriterId()).isEqualTo(expected.getWriterId())
+                () -> assertThat(actual.getWriter()).isEqualTo(expected.getWriter())
         );
     }
 
@@ -34,6 +34,6 @@ public class QuestionRepositoryTest {
         userRepository.save(expected);
         Question question = new Question("hello", "hi");
         question.writeBy(expected);
-        assertThat(question.getWriterId()).isEqualTo(expected.getId());
+        assertThat(question.getWriter()).isEqualTo(expected);
     }
 }

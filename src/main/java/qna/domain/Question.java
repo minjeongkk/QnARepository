@@ -13,7 +13,7 @@ public class Question {
     private String title;
     @Column
     private String contents;
-    @JoinColumn
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     @ManyToOne
     private User writer;
     @Column

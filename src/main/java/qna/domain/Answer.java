@@ -52,6 +52,10 @@ public class Answer {
 
     public void toQuestion(Question question) {
         this.question = question;
+
+        if (!this.question.getAnswerList().contains(this)){
+            this.question.getAnswerList().add(this);
+        }
     }
 
     public Long getId() {
@@ -70,7 +74,7 @@ public class Answer {
         this.writer = writer;
     }
 
-    public Question getQuestionId() {
+    public Question getQuestion() {
         return question;
     }
 

@@ -11,10 +11,10 @@ public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @JoinColumn
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
     @ManyToOne
     private User writer;
-    @JoinColumn
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     @ManyToOne
     private Question question;
     @Column
@@ -52,6 +52,10 @@ public class Answer {
 
     public void toQuestion(Question question) {
         this.question = question;
+
+        if (!this.question.getAnswerList().contains(this)){
+            this.question.getAnswerList().add(this);
+        }
     }
 
     public Long getId() {
@@ -70,7 +74,7 @@ public class Answer {
         this.writer = writer;
     }
 
-    public Question getQuestionId() {
+    public Question getQuestion() {
         return question;
     }
 

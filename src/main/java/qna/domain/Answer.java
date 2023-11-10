@@ -14,7 +14,7 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
     @ManyToOne
     private User writer;
-    @JoinColumn
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     @ManyToOne
     private Question question;
     @Column

@@ -11,7 +11,7 @@ public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @JoinColumn
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
     @ManyToOne
     private User writer;
     @JoinColumn

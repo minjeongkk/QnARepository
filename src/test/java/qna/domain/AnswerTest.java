@@ -20,11 +20,11 @@ public class AnswerTest {
 
     @Test
     void test_A1_question(){
-        assertThat(A1.getQuestionId().getTitle()).isEqualTo("title1");
+        assertThat(A1.getQuestion().getTitle()).isEqualTo("title1");
     }
 
     @Test
     void test_A2_question(){
-        assertThat(A2.getQuestionId().getTitle()).isEqualTo("title1");
+        assertThat(A2.getQuestion().getTitle()).isEqualTo("title1");
     }
 }

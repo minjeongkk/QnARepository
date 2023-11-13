@@ -1,8 +1,9 @@
 package qna.domain;
 
+import qna.CannotDeleteException;
+
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 public class Question {
@@ -18,8 +19,8 @@ public class Question {
     private User writer;
     @Column
     private boolean deleted = false;
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answerList = new ArrayList<>();
+    @Embedded
+    private Answers answerList = new Answers();
 
     public Question(String title, String contents) {
         this(null, title, contents);
@@ -40,8 +41,10 @@ public class Question {
         return this;
     }
 
-    public boolean isOwner(User writer) {
-        return this.writer.equals(writer);
+    public void isOwner(User writer) throws CannotDeleteException {
+        if (!this.writer.equals(writer)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
     }
 
     public void addAnswer(Answer answer) {
@@ -92,11 +95,11 @@ public class Question {
         this.deleted = deleted;
     }
 
-    public List<Answer> getAnswerList() {
+    public Answers getAnswerList() {
         return answerList;
     }
 
-    public void setAnswerList(List<Answer> answerList) {
+    public void setAnswerList(Answers answerList) {
         this.answerList = answerList;
     }
 
@@ -109,5 +112,24 @@ public class Question {
                 ", writer=" + writer +
                 ", deleted=" + deleted +
                 '}';
+    }
+
+    public DeleteHistories deleteQuestion(User loginUser) throws CannotDeleteException {
+        isOwner(loginUser);
+
+        for (Answer answer : this.answerList.get()) {
+            answer.isOwner(loginUser);
+        }
+
+        return delete();
+    }
+
+    public DeleteHistories delete() {
+        DeleteHistories deleteHistories = new DeleteHistories();
+        setDeleted(true);
+        deleteHistories.addDeleteHistory(new DeleteHistory(ContentType.QUESTION, this.id, this.writer, LocalDateTime.now()));
+        deleteHistories.addDeleteHistories(this.answerList.delete());
+
+        return deleteHistories;
     }
 }

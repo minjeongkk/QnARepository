@@ -18,8 +18,8 @@ public class Question {
     private User writer;
     @Column
     private boolean deleted = false;
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answerList = new ArrayList<>();
+    @Embedded
+    private Answers answerList = new Answers();
 
     public Question(String title, String contents) {
         this(null, title, contents);
@@ -92,11 +92,11 @@ public class Question {
         this.deleted = deleted;
     }
 
-    public List<Answer> getAnswerList() {
+    public Answers getAnswerList() {
         return answerList;
     }
 
-    public void setAnswerList(List<Answer> answerList) {
+    public void setAnswerList(Answers answerList) {
         this.answerList = answerList;
     }
 

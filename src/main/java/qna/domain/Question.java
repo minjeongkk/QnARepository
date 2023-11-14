@@ -1,6 +1,7 @@
 package qna.domain;
 
 import qna.CannotDeleteException;
+import qna.ErrorMessage;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ public class Question {
     @Column
     private String contents;
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User writer;
     @Column
     private boolean deleted = false;
@@ -43,7 +44,7 @@ public class Question {
 
     public void isOwner(User writer) throws CannotDeleteException {
         if (!this.writer.equals(writer)) {
-            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+            throw new CannotDeleteException(ErrorMessage.CHECK_QUESTION_AUTH);
         }
     }
 

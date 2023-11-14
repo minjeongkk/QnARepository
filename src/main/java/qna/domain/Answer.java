@@ -1,6 +1,7 @@
 package qna.domain;
 
 import qna.CannotDeleteException;
+import qna.ErrorMessage;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
@@ -13,10 +14,10 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User writer;
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Question question;
     @Column
     private String contents;
@@ -49,7 +50,7 @@ public class Answer {
 
     public void isOwner(User loginUser) throws CannotDeleteException {
         if (!this.writer.equals(loginUser)||!this.writer.equals(this.question.getWriter())) {
-            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+            throw new CannotDeleteException(ErrorMessage.CHECK_ANSWER_AUTH);
         }
     }
 

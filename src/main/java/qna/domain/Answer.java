@@ -1,6 +1,7 @@
 package qna.domain;
 
 import qna.CannotDeleteException;
+import qna.ErrorMessage;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
 
@@ -49,7 +50,7 @@ public class Answer {
 
     public void isOwner(User loginUser) throws CannotDeleteException {
         if (!this.writer.equals(loginUser)||!this.writer.equals(this.question.getWriter())) {
-            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+            throw new CannotDeleteException(ErrorMessage.CHECK_ANSWER_AUTH);
         }
     }
 

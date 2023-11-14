@@ -11,14 +11,14 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column
+    @Column(length = 100, nullable = false)
     private String title;
-    @Column
+    @Lob
     private String contents;
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     @ManyToOne(fetch = FetchType.LAZY)
     private User writer;
-    @Column
+    @Column(nullable = false)
     private boolean deleted = false;
     @Embedded
     private Answers answerList = new Answers();

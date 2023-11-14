@@ -19,9 +19,9 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     @ManyToOne(fetch = FetchType.LAZY)
     private Question question;
-    @Column
+    @Lob
     private String contents;
-    @Column
+    @Column(nullable = false)
     private boolean deleted = false;
 
     public Answer(User writer, Question question, String contents) {

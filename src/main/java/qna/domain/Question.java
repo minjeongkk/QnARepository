@@ -16,7 +16,7 @@ public class Question {
     @Column
     private String contents;
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User writer;
     @Column
     private boolean deleted = false;

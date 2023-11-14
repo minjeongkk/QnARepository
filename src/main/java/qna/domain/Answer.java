@@ -14,10 +14,10 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User writer;
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Question question;
     @Column
     private String contents;

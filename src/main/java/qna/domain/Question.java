@@ -1,24 +1,28 @@
 package qna.domain;
 
+import lombok.Builder;
+import lombok.Getter;
 import qna.CannotDeleteException;
 import qna.ErrorMessage;
+import qna.dto.QuestionDTO;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 100, nullable = false)
+    @Column(length = 100)
     private String title;
     @Lob
     private String contents;
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     @ManyToOne(fetch = FetchType.LAZY)
     private User writer;
-    @Column(nullable = false)
+    @Column
     private boolean deleted = false;
     @Embedded
     private Answers answerList = new Answers();
@@ -31,6 +35,15 @@ public class Question {
         this.id = id;
         this.title = title;
         this.contents = contents;
+    }
+
+    public Question(Long id, String title, String contents, User writer, boolean deleted, Answers answerList) {
+        this.id = id;
+        this.title = title;
+        this.contents = contents;
+        this.writer = writer;
+        this.deleted = deleted;
+        this.answerList = answerList;
     }
 
     public Question() {
@@ -132,5 +145,14 @@ public class Question {
         deleteHistories.addDeleteHistories(this.answerList.delete());
 
         return deleteHistories;
+    }
+
+    public QuestionDTO toDTO(){
+        return QuestionDTO.builder()
+                .id(id)
+                .title(title)
+                .contents(contents)
+                .userId(writer.getId())
+                .build();
     }
 }

@@ -8,6 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import qna.CannotDeleteException;
 import qna.NotFoundException;
 import qna.domain.*;
+import qna.dto.QuestionDTO;
+import qna.dto.UserDTO;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class QnaService {
@@ -17,6 +23,7 @@ public class QnaService {
     private QuestionRepository questionRepository;
     @Autowired
     private AnswerRepository answerRepository;
+    @Autowired UserRepository userRepository;
     @Autowired
     private DeleteHistoryService deleteHistoryService;
 
@@ -26,9 +33,23 @@ public class QnaService {
         this.deleteHistoryService = deleteHistoryService;
     }
 
+    public Long save(QuestionDTO questionDTO){
+        User writer = userRepository.findUserById(questionDTO.getUserId());
+        Question question = questionDTO.toEntity();
+        question.writeBy(writer);
+        questionRepository.save(question);
+        return question.getId();
+    }
+
+//    @Transactional(readOnly = true)
+//    public Question findQuestionById(Long id) {
+//        return questionRepository.findByIdAndDeletedFalse(id)
+//                .orElseThrow(NotFoundException::new);
+//    }
+
     @Transactional(readOnly = true)
     public Question findQuestionById(Long id) {
-        return questionRepository.findByIdAndDeletedFalse(id)
+        return questionRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
     }
 
@@ -39,5 +60,11 @@ public class QnaService {
         DeleteHistories deleteHistories = question.deleteQuestion(loginUser);
 
         deleteHistoryService.saveAll(deleteHistories.getHistories());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Question> findQuestionsByUser(Long userId){
+        User user = userRepository.findUserById(userId);
+        return questionRepository.findByWriter(user);
     }
 }

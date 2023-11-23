@@ -13,4 +13,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     Optional<Question> findByIdAndDeletedFalse(Long id);
 
     Question findQuestionById(Long id);
+
+    List<Question> findByWriter(User writer);
 }

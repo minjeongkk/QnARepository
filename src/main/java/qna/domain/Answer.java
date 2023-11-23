@@ -1,14 +1,17 @@
 package qna.domain;
 
+import lombok.Builder;
 import qna.CannotDeleteException;
 import qna.ErrorMessage;
 import qna.NotFoundException;
 import qna.UnAuthorizedException;
+import qna.dto.AnswerDTO;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Builder
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +24,7 @@ public class Answer {
     private Question question;
     @Lob
     private String contents;
-    @Column(nullable = false)
+    @Column
     private boolean deleted = false;
 
     public Answer(User writer, Question question, String contents) {
@@ -46,6 +49,14 @@ public class Answer {
 
     public Answer() {
 
+    }
+
+    public Answer(Long id, User writer, Question question, String contents, boolean deleted) {
+        this.id = id;
+        this.writer = writer;
+        this.question = question;
+        this.contents = contents;
+        this.deleted = deleted;
     }
 
     public void isOwner(User loginUser) throws CannotDeleteException {
@@ -111,5 +122,14 @@ public class Answer {
                 ", contents='" + contents + '\'' +
                 ", deleted=" + deleted +
                 '}';
+    }
+
+    public AnswerDTO toDTO(){
+        return AnswerDTO.builder()
+                .id(id)
+                .contents(contents)
+                .questionId(question.getId())
+                .userId(writer.getId())
+                .build();
     }
 }

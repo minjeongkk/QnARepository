@@ -1,22 +1,26 @@
 package qna.domain;
 
+import lombok.Builder;
+import lombok.Getter;
 import qna.UnAuthorizedException;
+import qna.dto.UserDTO;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Builder
 public class User {
     public static final GuestUser GUEST_USER = new GuestUser();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length=20, nullable = false, unique = true)
+    @Column(length=20, unique = true)
     private String userId;
-    @Column(length=20, nullable = false)
+    @Column(length=20)
     private String password;
-    @Column(length=20, nullable = false)
+    @Column(length=20)
     private String name;
     @Column(length=50)
     private String email;
@@ -67,44 +71,44 @@ public class User {
                 email.equals(target.email);
     }
 
-    public boolean isGuestUser() {
-        return false;
-    }
-
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getEmail() {
         return email;
+    }
+
+    public boolean isGuestUser() {
+        return false;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setEmail(String email) {
@@ -120,6 +124,16 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public UserDTO toDTO(){
+        return UserDTO.builder()
+                .id(id)
+                .userId(userId)
+                .name(name)
+                .email(email)
+                .password(password)
+                .build();
     }
 
     private static class GuestUser extends User {

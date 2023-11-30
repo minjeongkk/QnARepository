@@ -1,5 +1,7 @@
 package qna.domain;
 
+import qna.CannotDeleteException;
+
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
@@ -30,5 +32,11 @@ public class Answers {
 
     public boolean contains(Answer answer) {
         return answerList.contains(answer);
+    }
+
+    public void isOwner(User loginUser) throws CannotDeleteException {
+        for (Answer answer : answerList) {
+            answer.isOwner(loginUser);
+        }
     }
 }

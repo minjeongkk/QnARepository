@@ -127,8 +127,6 @@ public class Question {
 
     public void checkOwner(User loginUser) throws CannotDeleteException {
         isOwner(loginUser);
-        for (Answer answer : this.answerList.get()) {
-            answer.isOwner(loginUser);
-        }
+        answerList.isOwner(loginUser);
     }
 }

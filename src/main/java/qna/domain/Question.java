@@ -115,22 +115,20 @@ public class Question {
                 '}';
     }
 
-    public DeleteHistories deleteQuestion(User loginUser) throws CannotDeleteException {
-        isOwner(loginUser);
-
-        for (Answer answer : this.answerList.get()) {
-            answer.isOwner(loginUser);
-        }
-
-        return delete();
-    }
-
-    public DeleteHistories delete() {
+    public DeleteHistories delete(User loginUser) throws CannotDeleteException {
+        checkOwner(loginUser);
         DeleteHistories deleteHistories = new DeleteHistories();
         setDeleted(true);
         deleteHistories.addDeleteHistory(new DeleteHistory(ContentType.QUESTION, this.id, this.writer, LocalDateTime.now()));
         deleteHistories.addDeleteHistories(this.answerList.delete());
 
         return deleteHistories;
+    }
+
+    public void checkOwner(User loginUser) throws CannotDeleteException {
+        isOwner(loginUser);
+        for (Answer answer : this.answerList.get()) {
+            answer.isOwner(loginUser);
+        }
     }
 }
